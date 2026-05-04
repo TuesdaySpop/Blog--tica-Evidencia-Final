@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blog — Ética y Sociedad</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #f3ebf1;
+    --text: #1a1a1a;
+    --accent: #cc0066;
+    --accent2: #da61ab;
+    --light: #ffffff;
+    --muted: #6b7280;
+    --border: #e5e0d8;
+    --card: #ffffff;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+  }
+
+  /* HEADER */
+  header {
+    background: var(--accent);
+    color: white;
+    padding: 60px 40px 50px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  header::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 220px; height: 220px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+  }
+
+  header::after {
+    content: '';
+    position: absolute;
+    bottom: -40px; left: -40px;
+    width: 160px; height: 160px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.25);
+  }
+
+  header .tag {
+    display: inline-block;
+    background: rgba(255,255,255,0.15);
+    color: white;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 5px 14px;
+    border-radius: 20px;
+    margin-bottom: 18px;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px, 5vw, 48px);
+    font-weight: 700;
+    margin-bottom: 12px;
+    position: relative;
+    z-index: 1;
+  }
+
+  header p {
+    font-size: 15px;
+    opacity: 0.8;
+    max-width: 500px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* NAV */
+  nav {
+    background: var(--light);
+    border-bottom: 1px solid var(--border);
+    padding: 0 40px;
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  }
+
+  nav a {
+    text-decoration: none;
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 500;
+    padding: 16px 20px;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+    transition: all 0.2s;
+  }
+
+  nav a:hover {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+
+  /* MAIN */
+  main {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 50px 24px 80px;
+  }
+
+  /* SECTIONS */
+  section {
+    margin-bottom: 60px;
+    opacity: 0;
+    transform: translateY(24px);
+    animation: fadeUp 0.6s forwards;
+  }
+
+  section:nth-child(1) { animation-delay: 0.1s; }
+  section:nth-child(2) { animation-delay: 0.2s; }
+  section:nth-child(3) { animation-delay: 0.3s; }
+  section:nth-child(4) { animation-delay: 0.4s; }
+  section:nth-child(5) { animation-delay: 0.5s; }
+
+  @keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .section-label {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 500;
+    margin-bottom: 8px;
+  }
+
+  section h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(22px, 4vw, 32px);
+    margin-bottom: 16px;
+    color: var(--text);
+  }
+
+  section p {
+    color: #3d3d3d;
+    font-size: 15px;
+    margin-bottom: 12px;
+  }
+
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin-bottom: 40px;
+  }
+
+  /* CARDS GRID */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+    margin-top: 24px;
+  }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px 20px;
+    cursor: pointer;
+    transition: all 0.25s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px;
+    height: 100%;
+    background: var(--accent);
+    transform: scaleY(0);
+    transition: transform 0.25s;
+    transform-origin: bottom;
+  }
+
+  .card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 28px rgba(0,0,0,0.08);
+    border-color: var(--accent2);
+  }
+
+  .card:hover::before {
+    transform: scaleY(1);
+  }
+
+  .card .emoji {
+    font-size: 28px;
+    margin-bottom: 12px;
+    display: block;
+  }
+
+  .card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    margin-bottom: 6px;
+  }
+
+  .card p {
+    font-size: 13px;
+    color: var(--muted);
+    margin: 0;
+  }
+
+  .card .read-more {
+    display: inline-block;
+    margin-top: 12px;
+    font-size: 12px;
+    color: var(--accent);
+    font-weight: 500;
+    letter-spacing: 0.5px;
+  }
+
+  /* MODAL */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    backdrop-filter: blur(3px);
+  }
+
+  .modal-overlay.active {
+    display: flex;
+    animation: fadeIn 0.2s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  .modal {
+    background: var(--light);
+    border-radius: 16px;
+    max-width: 560px;
+    width: 100%;
+    padding: 36px;
+    position: relative;
+    max-height: 80vh;
+    overflow-y: auto;
+    animation: slideUp 0.3s ease;
+  }
+
+  @keyframes slideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  .modal .modal-emoji {
+    font-size: 36px;
+    margin-bottom: 12px;
+  }
+
+  .modal h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    margin-bottom: 14px;
+    color: var(--text);
+  }
+
+  .modal p {
+    font-size: 14px;
+    color: #444;
+    margin-bottom: 10px;
+    line-height: 1.7;
+  }
+
+  .modal .close-btn {
+    position: absolute;
+    top: 16px; right: 20px;
+    background: var(--bg);
+    border: none;
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 16px;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+  }
+
+  .modal .close-btn:hover {
+    background: var(--border);
+  }
+
+  /* CHART */
+  .chart-container {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 28px;
+    margin-top: 24px;
+  }
+
+  .chart-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px;
+    margin-bottom: 6px;
+  }
+
+  .chart-sub {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 20px;
+  }
+
+  canvas {
+    max-height: 280px;
+  }
+
+  /* EXCLUSION PILLS */
+  .pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .pill {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 30px;
+    padding: 10px 20px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .pill:hover {
+    background: var(--accent);
+    color: white;
+    border-color: var(--accent);
+  }
+
+  /* RASGOS LIST */
+  .rasgo-item {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 12px;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .rasgo-item:hover {
+    box-shadow: 0 6px 20px rgba(0,0,0,0.07);
+    transform: translateX(4px);
+    border-color: var(--accent2);
+  }
+
+  .rasgo-item .rasgo-icon {
+    font-size: 24px;
+    flex-shrink: 0;
+  }
+
+  .rasgo-item h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    margin-bottom: 4px;
+  }
+
+  .rasgo-item p {
+    font-size: 13px;
+    color: var(--muted);
+    margin: 0;
+  }
+
+  /* FOOTER */
+  footer {
+    text-align: center;
+    padding: 30px;
+    border-top: 1px solid var(--border);
+    font-size: 13px;
+    color: var(--muted);
+    background: var(--light);
+  }
+
+  /* QUOTE */
+  blockquote {
+    border-left: 3px solid var(--accent);
+    padding: 14px 20px;
+    margin: 20px 0;
+    background: rgba(45,106,79,0.05);
+    border-radius: 0 8px 8px 0;
+    font-style: italic;
+    font-size: 15px;
+    color: #3d3d3d;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="tag">Módulo 3</div>
+  <h1>Ética Profesional y Ciudadanía</h1>
+  <p>Un recorrido por los temas fundamentales de la materia</p>
+</header>
+
+<nav>
+  <a href="#ddhh">Derechos Humanos</a>
+  <a href="#capital">Capital Social</a>
+  <a href="#exclusion">Exclusión</a>
+  <a href="#rasgos">Interculturalidad</a>
+  <a href="#planetaria">Ética Planetaria</a>
+</nav>
+
+<main>
+
+  <!-- SECCIÓN 1: DERECHOS HUMANOS -->
+  <section id="ddhh">
+    <p class="section-label">01 — Declaración Universal</p>
+    <h2>Derechos Humanos</h2>
+    <p>Adoptada el <strong>10 de diciembre de 1948</strong> por la ONU tras la Segunda Guerra Mundial, esta declaración establece los derechos fundamentales de toda persona, en cualquier lugar del mundo, sin excepción.</p>
+    <blockquote>"Todos los seres humanos nacen libres e iguales en dignidad y derechos."</blockquote>
+
+    <div class="chart-container">
+      <p class="chart-title">Las 3 Generaciones de Derechos</p>
+      <p class="chart-sub">Haz clic en cada sección para más información</p>
+      <canvas id="derechosChart"></canvas>
+    </div>
+
+    <div class="cards-grid" style="margin-top:24px;">
+      <div class="card" onclick="openModal('civil')">
+        <h3>1ª Generación</h3>
+        <p>Derechos civiles y políticos</p>
+        <span class="read-more">Ver más →</span>
+      </div>
+      <div class="card" onclick="openModal('social')">
+        <h3>2ª Generación</h3>
+        <p>Derechos económicos, sociales y culturales</p>
+        <span class="read-more">Ver más →</span>
+      </div>
+      <div class="card" onclick="openModal('colectivo')">
+        <h3>3ª Generación</h3>
+        <p>Derechos colectivos y de solidaridad</p>
+        <span class="read-more">Ver más →</span>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- SECCIÓN 2: CAPITAL SOCIAL -->
+  <section id="capital">
+    <p class="section-label">02 — Capital Social</p>
+    <h2>Capital Social y Ciudadanía</h2>
+    <p>El capital social es el conjunto de redes, normas y confianza que facilitan la cooperación entre personas para el beneficio mutuo. Una sociedad con alto capital social funciona mejor porque sus ciudadanos se ayudan, confían entre sí y participan activamente.</p>
+
+    <div class="cards-grid">
+      <div class="card" onclick="openModal('confianza')">
+        <span class="emoji">🤝</span>
+        <h3>Confianza</h3>
+        <p>Base de toda relación social sana</p>
+        <span class="read-more">Ver más →</span>
+      </div>
+      <div class="card" onclick="openModal('redes')">
+        <span class="emoji">🌐</span>
+        <h3>Redes Sociales</h3>
+        <p>Vínculos que conectan a las personas</p>
+        <span class="read-more">Ver más →</span>
+      </div>
+      <div class="card" onclick="openModal('participacion')">
+        <span class="emoji">📣</span>
+        <h3>Participación</h3>
+        <p>Involucrarse activamente en la comunidad</p>
+        <span class="read-more">Ver más →</span>
+      </div>
+      <div class="card" onclick="openModal('normas')">
+        <span class="emoji">⚖️</span>
+        <h3>Normas Cívicas</h3>
+        <p>Reglas que guían la convivencia</p>
+        <span class="read-more">Ver más →</span>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- SECCIÓN 3: EXCLUSIÓN -->
+  <section id="exclusion">
+    <p class="section-label">03 — EXCLUSIÓN</p>
+    <h2>Formas de Exclusión Social</h2>
+    <p>La exclusión social ocurre cuando a ciertos grupos se les niega el acceso pleno a la vida en sociedad. Existen cuatro formas principales. Haz clic en cada una para conocerla.</p>
+
+    <div class="pills">
+      <div class="pill" onclick="openModal('eliminacion')">🚫 Eliminación</div>
+      <div class="pill" onclick="openModal('asimilacion')">🔄 Asimilación</div>
+      <div class="pill" onclick="openModal('dominacion')">👆 Dominación</div>
+      <div class="pill" onclick="openModal('abandono')">🚶 Abandono</div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- SECCIÓN 4: RASGOS ÉTICOS -->
+  <section id="rasgos">
+    <p class="section-label">04 — Interculturalidad</p>
+    <h2>Rasgos Éticos del Entendimiento Intercultural</h2>
+    <p>La interculturalidad no es solo tolerar al diferente — es enriquecerse con él. Tres rasgos éticos hacen posible este entendimiento.</p>
+
+    <div style="margin-top:20px;">
+      <div class="rasgo-item" onclick="openModal('empatia')">
+        <div>
+          <h4>Empatía</h4>
+          <p>Ponerse en el lugar del otro y comprender su realidad sin juzgar</p>
+        </div>
+      </div>
+      <div class="rasgo-item" onclick="openModal('aceptacion')">
+        <div>
+          <h4>Aceptación</h4>
+          <p>Reconocer y respetar las diferencias culturales como válidas</p>
+        </div>
+      </div>
+      <div class="rasgo-item" onclick="openModal('valoracion')">
+        <div>
+          <h4>Valoración</h4>
+          <p>Ver las diferencias no como problema, sino como riqueza</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- SECCIÓN 5: ÉTICA PLANETARIA -->
+  <section id="planetaria">
+    <p class="section-label">05 — Ética Planetaria</p>
+    <h2>Ética Planetaria</h2>
+    <p>La ética planetaria amplía nuestra responsabilidad más allá de nosotros mismos. No solo debemos actuar bien con las personas que nos rodean, sino con el planeta, las generaciones futuras y todos los seres vivos.</p>
+    <blockquote>Actúa de tal manera que tu acción pueda convertirse en ley universal para todo ser humano y para la Tierra misma.</blockquote>
+
+    <div class="cards-grid">
+      <div class="card" onclick="openModal('medioambiente')">
+        <h3>Cuidado del Planeta</h3>
+        <p>Responsabilidad con el medio ambiente</p>
+        <span class="read-more">Ver más →</span>
+      </div>
+      <div class="card" onclick="openModal('generaciones')">
+        <h3>Generaciones Futuras</h3>
+        <p>Nuestras decisiones afectan a quienes aún no nacen</p>
+        <span class="read-more">Ver más →</span>
+      </div>
+      <div class="card" onclick="openModal('imperativo')">
+        <h3>Nuevo Imperativo Categórico</h3>
+        <p>Actuar pensando en el bien universal</p>
+        <span class="read-more">Ver más →</span>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  Blog elaborado como evidencia final · Ética profesional y ciudadanía · Melisa Ramírez Reyes - Al03022442
+</footer>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModalOutside(event)">
+  <div class="modal" id="modalBox">
+    <button class="close-btn" onclick="closeModal()">✕</button>
+    <div class="modal-emoji" id="modalEmoji"></div>
+    <h3 id="modalTitle"></h3>
+    <div id="modalContent"></div>
+  </div>
+</div>
+
+<script>
+const modalData = {
+  civil: {
+    title: '1ª Generación — Derechos Civiles y Políticos',
+    content: `<p>Son los primeros derechos reconocidos históricamente. Protegen al individuo frente al poder del Estado.</p>
+    <p><strong>Incluyen:</strong> derecho a la vida, libertad de expresión, libertad de religión, derecho al voto, prohibición de la tortura.</p>
+    <p><strong>Principio:</strong> El Estado no debe interferir en la vida de las personas.</p>`
+  },
+  social: {
+    title: '2ª Generación — Derechos Económicos, Sociales y Culturales',
+    content: `<p>Surgieron en el siglo XX con los movimientos obreros y sociales. Exigen que el Estado actúe para garantizarlos.</p>
+    <p><strong>Incluyen:</strong> derecho al trabajo, salud, educación, vivienda y seguridad social.</p>
+    <p><strong>Principio:</strong> El Estado debe garantizar condiciones dignas de vida.</p>`
+  },
+  colectivo: {
+    title: '3ª Generación — Derechos Colectivos y de Solidaridad',
+    content: `<p>Son los más recientes. No protegen al individuo solo, sino a grupos y a la humanidad entera.</p>
+    <p><strong>Incluyen:</strong> derecho a la paz, al medio ambiente sano, al desarrollo y a la autodeterminación de los pueblos.</p>
+    <p><strong>Principio:</strong> Todos debemos cooperar para garantizarlos.</p>`
+  },
+  confianza: {
+    title: 'Confianza',
+    content: `<p>Es el pilar del capital social. Sin confianza, las personas no cooperan, no delegan y no construyen comunidad.</p>
+    <p>Una sociedad con alta confianza resuelve problemas más rápido, tiene menos corrupción y más bienestar colectivo.</p>`
+  },
+  redes: {
+    title: 'Redes Sociales (comunitarias)',
+    content: `<p>Son los vínculos entre personas e instituciones que permiten el flujo de información, apoyo y recursos.</p>
+    <p>Cuanto más fuertes y diversas son las redes de una comunidad, mayor es su capacidad de respuesta ante problemas.</p>`
+  },
+  participacion: {
+    title: 'Participación Ciudadana',
+    content: `<p>Es el involucramiento activo de las personas en decisiones que afectan su comunidad.</p>
+    <p>Votar, asistir a asambleas, organizarse en colectivos o denunciar irregularidades son formas de participación que fortalecen la democracia.</p>`
+  },
+  normas: {
+    title: 'Normas Cívicas',
+    content: `<p>Son las reglas no escritas y escritas que guían el comportamiento en sociedad.</p>
+    <p>Desde respetar el turno en una fila hasta cumplir con los impuestos — las normas cívicas hacen posible la convivencia pacífica.</p>`
+  },
+  eliminacion: {
+    title: 'Eliminación',
+    content: `<p>Es la forma más extrema de exclusión. Consiste en borrar física o culturalmente a un grupo de la sociedad.</p>
+    <p><strong>Ejemplo:</strong> En Veracruz, comunidades indígenas han sido desalojadas por la fuerza para construir fraccionamientos privados. Simplemente los borran del mapa.</p>`
+  },
+  asimilacion: {
+    title: 'Asimilación',
+    content: `<p>No se elimina a la persona, pero sí su identidad. Se le presiona a abandonar su cultura para "integrarse" a la sociedad dominante.</p>
+    <p><strong>Ejemplo:</strong> Obligar a niños indígenas a hablar solo español y prohibirles su lengua materna en las escuelas.</p>`
+  },
+  dominacion: {
+    title: 'Dominación',
+    content: `<p>El grupo excluido existe, pero en posición de inferioridad. Se le niegan derechos, oportunidades o poder.</p>
+    <p><strong>Ejemplo:</strong> Trabajadores con más experiencia que nunca son considerados para ascensos por no tener título universitario.</p>`
+  },
+  abandono: {
+    title: 'Abandono',
+    content: `<p>El Estado o la sociedad simplemente ignora a ciertos grupos. No hay violencia directa, pero tampoco apoyo ni servicios.</p>
+    <p><strong>Ejemplo:</strong> Colonias en las orillas de Veracruz sin agua potable, alumbrado ni calles pavimentadas. El gobierno simplemente los olvidó.</p>`
+  },
+  empatia: {
+    title: 'Empatía',
+    content: `<p>Es la capacidad de ponerse en el lugar del otro y sentir lo que siente, sin juzgar. Va más allá de la simpatía.</p>
+    <p>En el ámbito intercultural, la empatía permite entender por qué una cultura actúa diferente a la tuya sin verlo como algo malo.</p>
+    <p><strong>En la vida diaria:</strong> Notar cuando un compañero está estresado y apoyarle aunque tú también tengas carga encima.</p>`
+  },
+  aceptacion: {
+    title: 'Aceptación',
+    content: `<p>Implica reconocer que las diferencias culturales son válidas y legítimas, aunque sean distintas a las propias.</p>
+    <p>Aceptar no significa estar de acuerdo con todo, sino respetar el derecho del otro a ser diferente.</p>
+    <p>En una empresa multicultural, significa no imponer tu forma de trabajar como la única correcta.</p>`
+  },
+  valoracion: {
+    title: 'Valoración',
+    content: `<p>Es el nivel más alto del entendimiento intercultural. No solo aceptas la diferencia — la ves como una riqueza que te enriquece.</p>
+    <p>Una empresa o equipo que valora la diversidad toma mejores decisiones porque tiene más perspectivas.</p>
+    <p>La valoración convierte la diferencia de problema en oportunidad.</p>`
+  },
+  medioambiente: {
+    title: 'Cuidado del Planeta',
+    content: `<p>La ética planetaria nos recuerda que el medio ambiente no es un recurso infinito. Cada decisión profesional tiene impacto ambiental.</p>
+    <p>Como ingenieros industriales, diseñar procesos más eficientes no solo reduce costos — también reduce el daño al planeta.</p>`
+  },
+  generaciones: {
+    title: 'Responsabilidad con las Generaciones Futuras',
+    content: `<p>Nuestras decisiones de hoy afectan a personas que aún no han nacido. Eso nos da una responsabilidad enorme.</p>
+    <p>El principio de precaución dice: si una acción puede causar daño a quienes no pueden defenderse, hay que evitarla aunque aún no sea un daño visible.</p>`
+  },
+  imperativo: {
+    title: 'Nuevo Imperativo Categórico',
+    content: `<p>Basado en Kant pero ampliado: actúa de tal manera que tu acción pueda convertirse en ley universal no solo para los humanos sino para toda la vida en el planeta.</p>
+    <p>Ya no basta con preguntarte si tu acción es justa para las personas — también debes preguntarte si es justa para el planeta y las generaciones futuras.</p>`
+  }
+};
+
+function openModal(key) {
+  const data = modalData[key];
+  if (!data) return;
+  document.getElementById('modalEmoji').textContent = data.emoji;
+  document.getElementById('modalTitle').textContent = data.title;
+  document.getElementById('modalContent').innerHTML = data.content;
+  document.getElementById('modalOverlay').classList.add('active');
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('active');
+}
+
+function closeModalOutside(e) {
+  if (e.target === document.getElementById('modalOverlay')) closeModal();
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+// CHART
+const ctx = document.getElementById('derechosChart').getContext('2d');
+new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: ['1ª Generación\nCiviles y Políticos', '2ª Generación\nEconómicos y Sociales', '3ª Generación\nColectivos'],
+    datasets: [{
+      label: 'Artículos relacionados (aprox.)',
+      data: [21, 6, 3],
+      backgroundColor: ['rgba(128,31,74,0.75)', 'rgba(181,33,99,0.5)', 'rgba(240,43,129,0.3)'],
+      borderColor: ['#CC0066', '#CC0066', '#CC0066'],
+      borderWidth: 1.5,
+      borderRadius: 6,
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: ctx => ` ${ctx.raw} artículos de la Declaración`
+        }
+      }
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        grid: { color: 'rgba(0,0,0,0.05)' },
+        ticks: { font: { family: 'DM Sans', size: 12 } }
+      },
+      x: {
+        grid: { display: false },
+        ticks: { font: { family: 'DM Sans', size: 12 } }
+      }
+    }
+  }
+});
+</script>
+</body>
+</html>
